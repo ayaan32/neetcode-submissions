@@ -1,22 +1,18 @@
 class Solution {
 public:
-    int carFleet(int target, vector<int>& position, vector<int>& speed) {
-        int n = position.size();
-        if(n==0) return 0;
-        vector<pair<int,int>> vec;
-        for(int i=0; i<n; i++) {
-            vec.push_back({position[i], speed[i]});
-        }
-        sort(vec.rbegin(), vec.rend());
-        double prev = (double)(target - vec[0].first)/vec[0].second;
-        int fleet = 1;
-        for(int i=1; i<n; i++) {
-            double cur = (double)(target - vec[i].first)/vec[i].second;
-            if(cur>prev) {
-                fleet++;
-                prev=cur;
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        int res=0;
+        stack<int> st;
+        for(int i=0; i<=n; i++) {
+            while(!st.empty() && (i==n || heights[st.top()] >= heights[i])) {
+                int h = heights[st.top()];
+                st.pop();
+                int w = st.empty() ? i : i-st.top() - 1;
+                res = max(res, h*w);
             }
+            st.push(i);
         }
-        return fleet;
+        return res;
     }
 };
